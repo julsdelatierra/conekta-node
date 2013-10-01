@@ -1,0 +1,18 @@
+{
+  "name": "conekta",
+  "version": "0.6.0",
+  "description": "Easy Conekta nodeJS wrapper.",
+  "main": "./conekta.js",
+  "homepage": "https://github.com/conekta/conekta-node",
+  "author": {
+    "name": "Julian Ceballos",
+    "email": "julian@lastroom.mx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/conekta/conekta-node"
+  },
+  "dependencies": {
+    "request": ""
+  }
+}

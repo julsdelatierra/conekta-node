@@ -39,10 +39,10 @@ var data = {
 
 var charge = conekta.Charge.create(data);
 
-#Also you can get the attributes from the conekta response class:
+//Also you can get the attributes from the conekta response class:
 console.log(charge.id);
 
-#Or if you get an error:
+//Or if you get an error:
 console.log(charge.error.type);
 ```
 
@@ -70,10 +70,10 @@ var data = {
 
 var charge = conekta.Charge.create(data);
 
-#Also you can get the attributes from the conekta response class:
+//Also you can get the attributes from the conekta response class:
 console.log(charge.id);
 
-#Or if you get an error:
+//Or if you get an error:
 console.log(charge.error.type);
 ```
 
@@ -101,10 +101,10 @@ var data = {
 
 var charge = conekta.Charge.create(data);
 
-#Also you can get the attributes from the conekta response class:
+//Also you can get the attributes from the conekta response class:
 console.log(charge.id);
 
-#Or if you get an error:
+//Or if you get an error:
 console.log(charge.error.type);
 ```
 

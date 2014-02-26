@@ -7,7 +7,7 @@
   var INCLUDE_URL = 'https://s3.amazonaws.com/conektaapi_includes/';
 
   var HEADERS = {
-    'Accept': 'application/vnd.example.v1',
+    'Accept': 'application/vnd.conekta-v0.3.0+json',
     'Content-type': 'application/json'
   };
 
@@ -63,11 +63,12 @@
     this.Token = new Token(this);
   };
 
-  Conekta.prototype.publishableKey = void 0;
-  Conekta.prototype.privateKey = void 0;
+  Conekta.prototype.public_key = void 0;
+  Conekta.prototype.private_key = void 0;
 
   Conekta.prototype.build_request = function(args) {
-    HEADERS['Authorization'] = 'Token token="' + this.api_key + '"';
+    var absolute_path = API_BASE + args.endpoint;
+    HEADERS['Authorization'] = 'Basic ' + this.Base64.encode(this.private_key + ':');
     var absolute_path = API_BASE + args.endpoint;
     var xhr = null;
     var params = {
@@ -139,7 +140,7 @@
       url += 'card[' + k + ']=' + card[k] + '&';
     }
     url += '_Version=0.3.0&_RaiseHtmlError=false&auth_token=';
-    url += this.publishableKey + '&';
+    url += this.public_key + '&';
     url += 'conekta_client_user_agent={"agent":"Conekta JavascriptBindings/0.3.0"}'
     return url;
   }

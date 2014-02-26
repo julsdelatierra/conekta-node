@@ -1,7 +1,7 @@
 var conekta = require('./conekta.js');
 
-conekta.public_key = 'DazE4p9yq3ZqFJS5ZLER';
-conekta.private_key = 'qzgGxFfos8aJqbgSq4pW';
+conekta.public_key = '';
+conekta.private_key = '';
 
 var data = {
     params: {

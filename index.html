@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Conekta test</h1>
+
+	<form id="conekta-fucking-hack" action="">
+		<input type="text" data-conekta="card[name]" value="Julian Ceballos">
+		<input type="text" data-conekta="card[number]" value="4941330102099491">
+		<input type="text" data-conekta="card[cvc]" value="321">
+		<input type="text" data-conekta="card[exp_month]" value="02">
+		<input type="text" data-conekta="card[exp_year]" value="18">
+		<button type="submit">Guardar</button>
+	</form>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://conektaapi.s3.amazonaws.com/v0.3.1/js/conekta.js"></script>
+	<script>
+	Conekta.setPublishableKey("DazE4p9yq3ZqFJS5ZLER");
+	console.log(Conekta.getPublishableKey());
+	$(document).ready(function() {
+		$('#conekta-fucking-hack').submit(function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			var $form = $(this);
+			$form.find('button').prop('disable', true);
+			console.log($form);
+			Conekta.token.create($form, function(response) {
+				console.log(response);
+			}, function(error) {
+				console.log(error);
+			});
+			return false;
+		});
+	});
+	</script>
+
+</body>
+</html>

@@ -3,7 +3,8 @@
   var root = this;
 
   var API_BASE = 'https://api.conekta.io/';
-  var SCRIPT_URL = 'https://h.online-metrix.net/fp/check.js?org_id=k8vif92e&session_id=banorteixe_conekta'
+  var SCRIPT_URL = 'https://h.online-metrix.net/fp/check.js?org_id=k8vif92e&session_id=banorteixe_conekta';
+  var INCLUDE_URL = 'https://s3.amazonaws.com/conektaapi_includes/';
 
   var HEADERS = {
     'Accept': 'application/vnd.example.v1',
@@ -20,14 +21,15 @@
   }
 
   var SESSION_ID = createSession();
-  console.log(SESSION_ID);
 
   var Token = function(ref) {
     var conekta = ref;
     return {
-      create: function(params) {
+      create: function(params, error, success) {
         params['endpoint'] = 'token';
         params['method'] = 'get';
+        params['success'] = success || params.success;
+        params['error'] = error ||params.error;
         conekta.load(params);
       }
     }
@@ -61,7 +63,8 @@
     this.Token = new Token(this);
   };
 
-  Conekta.prototype.public_key = 'EpnQNGMghzDrytvfpqtG';
+  Conekta.prototype.publishableKey = void 0;
+  Conekta.prototype.privateKey = void 0;
 
   Conekta.prototype.build_request = function(args) {
     HEADERS['Authorization'] = 'Token token="' + this.api_key + '"';
@@ -127,14 +130,18 @@
     }
   }
 
-  Conekta.prototype.getConektaScript = function(callback) {
-    var xhr = require('request');
-    var params = {
-      url: SCRIPT_URL + SESSION_ID,
-    };
-    xhr['get'](params, function(err, resp, body) {
-      callback(err, resp, body);
-    });
+  Conekta.prototype.getConektaUrl = function(args) {
+    
+    var url = 'https://api.conekta.io/tokens/create.js?callback=jsonp2&';
+    var card = args.data.card;
+    card.device_fingerprint = SESSION_ID;
+    for(var k in card) {
+      url += 'card[' + k + ']=' + card[k] + '&';
+    }
+    url += '_Version=0.3.0&_RaiseHtmlError=false&auth_token=';
+    url += this.publishableKey + '&';
+    url += 'conekta_client_user_agent={"agent":"Conekta JavascriptBindings/0.3.0"}'
+    return url;
   }
 
   Conekta.prototype.Base64 = {
@@ -194,46 +201,19 @@
     }
   }
 
-  Conekta.prototype.responseFn = function(resp) {
-    console.log('Resp-----------> ',resp);
-  }
-
   Conekta.prototype.create_token = function(args) {
     var me = this;
-    me.getConektaScript(function(err, resp, body) {
+    var url = me.getConektaUrl(args);
+    var xhr = require('request');
+    xhr.get(url, function(err, response, body) {
       if(err) {
-        return err;
+        args.error(err);
+        return false;
       }
-      var token = args.data;
-      token.card.device_fingerprint = SESSION_ID;
-      var xhr = require('request');
-      var params = {
-        url: API_BASE + 'tokens/create.js',
-        headers: {
-          'RaiseHtmlError': false,
-          'Accept': 'application/vnd.conekta-v0.3.0+json',
-          'Conekta-Client-User-Agent': '{"agent":"Conekta JavascriptBindings/0.3.0"}',
-          'Authorization': 'Basic ' + me.Base64.encode(me.public_key + ':')
-        },
-        data: token,
-        success: function(resp) {
-          console.log('Resp-----------> ',resp);
-          },
-        error: function(resp) {
-          console.log('Resp-----------> ',resp);
-        }
-      }
-      console.log(body);
-      console.log(token);
-      console.log(params);
-      xhr[args.method](params, function(error, response, body) {
-        console.log(error, body);
-        if (response.statusCode != 200 && response.statusCode != 201) {
-          // args.error(JSON.parse(body));
-        } else {
-          // args.success(JSON.parse(body));
-        }
-      });
+      var respJSON = body.replace('jsonp2(','').replace('})','}');
+      respJSON = JSON.parse(respJSON);
+      args.success(respJSON);
+      return 
     });
   }
 
@@ -246,7 +226,7 @@
       error: data.error || function() {}
     };
     if(data.endpoint === 'token'){
-      args.data = data.data;
+      args.data = data.params;
       return this.create_token(args);
     }
     return this.build_request(args);

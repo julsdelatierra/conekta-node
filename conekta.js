@@ -82,10 +82,11 @@
     if (typeof module !== 'undefined' && module.exports) {
       xhr = require('request');
       xhr[args.method](params, function(error, response, body) {
+        response.statusCode;
         if (response.statusCode != 200 && response.statusCode != 201) {
-          args.error(JSON.parse(body));
+          args.error(body);
         } else {
-          args.success(JSON.parse(body));
+          args.success(body);
         }
       });
       return false;

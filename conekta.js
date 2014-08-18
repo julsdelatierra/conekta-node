@@ -83,6 +83,8 @@
     this.Charge = new Charge(this);
     this.Event = new Event(this);
     this.Token = new Token(this);
+    this.Payee = new Payee(this);
+    this.Payout = new Payout(this);
   };
 
   Conekta.prototype.public_key = void 0;

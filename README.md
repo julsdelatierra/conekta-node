@@ -35,13 +35,11 @@ var data = {
     }
 }
 
-var charge = conekta.Charge.create(data);
-
-//Also you can get the attributes from the conekta response class:
-console.log(charge.id);
-
-//Or if you get an error:
-console.log(charge.error.type);
+var charge = conekta.Charge.create({
+    params: data,
+    success: function() {},
+    errror: function() {}
+});
 ```
 
 Charge via oxxo
@@ -66,13 +64,11 @@ var data = {
     }
 }
 
-var charge = conekta.Charge.create(data);
-
-//Also you can get the attributes from the conekta response class:
-console.log(charge.id);
-
-//Or if you get an error:
-console.log(charge.error.type);
+var charge = conekta.Charge.create({
+    params: data,
+    success: function() {},
+    errror: function() {}
+});
 ```
 
 Charge via bank:
@@ -97,13 +93,11 @@ var data = {
     }
 }
 
-var charge = conekta.Charge.create(data);
-
-//Also you can get the attributes from the conekta response class:
-console.log(charge.id);
-
-//Or if you get an error:
-console.log(charge.error.type);
+var charge = conekta.Charge.create({
+    params: data,
+    success: function() {},
+    errror: function() {}
+});
 ```
 
 

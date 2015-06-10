@@ -1,6 +1,8 @@
 Conekta 
 =========
 
+## This project is deprecated, i suggest you try the official node module: https://www.npmjs.com/package/conekta
+
 Install
 
 ```sh
